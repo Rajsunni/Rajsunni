@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Test System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    .hidden {
+      display: none;
+    }
+    #question-panel {
+      margin-top: 20px;
+    }
+    #options-container label {
+      display: block;
+      margin-bottom: 5px;
+    }
+  @media (max-width: 900px) {
+        .container {
+            padding: 15px;
+            
+        }
+        @media (orientation:landscape){
+         div{
+          height: 100%;
+            width: 100%;
+          
+        }
+      }
+    }
+    .preview-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .preview-button {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+    
+    
+    .answered { background-color: green; color: white; }
+    .not-answered { background-color: red; color: white; }
+    .marked { background-color: purple; color: white; }
+    .not-visited { background-color: rgb(47, 0, 255); color:white; }
+    .section-title {
+      font-size: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Instruction Page -->
+  <div id="instruction-page">
+    <h2>Instructions</h2>
+    <label for="language-select">Select Language:</label>
+    <select id="language-select">
+      <option value="en">English</option>
+     <option value="hi">Hindi</option>
+      <option value="pa">Punjabi</option>
+    </select>
+    <p>Welcome to the online test. Please read the instructions carefully:</p>
+    <ul>
+      <span style="color:blue;">General Instruction:</span>
+      <li>Select the Language in Which you Want To Test.</li>
+
+      
+      <li> The language <span style="color: red;">will not be changed</span> once the test has started.</li>
+      
+      <li>The <span style="color: red;">clock</span> will be set at the server.The countdown timer at the top left corner of screen will display the remaining time available for you to complete the examination.When the timer reaches Zero,the examination will end by itself.You need not terminate the examination or submit your paper.</li>
+      <li>A Clock is set below the question.it tells us how much time we spend on that question.</li>
+      <p>
+        <li> The Question palette displayed on the bottom side of screen will show the status of each question using one of the following symbols:</li>
+        <span style="display: inline-block; width: 20px; height: 20px; background-color: red; border-radius: 50%; margin-right: 10px;"></span>
+        You have <span style="color: red;">not answered</span>  the question.<br>
+        <span style="display: inline-block; width: 20px; height: 20px; background-color: green; border-radius: 50%; margin-right: 10px;"></span>
+
+        You have <span style="color: green;"> answered</span>  the question.<br>
+
+        <span style="display: inline-block; width: 20px; height: 20px; background-color: purple; border-radius: 50%; margin-right: 10px;"></span>
+
+        You have <span style="color: purple;">Not answered </span>the question,but have marked the question for review.<br>
+<br>
+        <span style="color:blue;">Navigating to a Question:</span>
+        <p>To answer a Question,do the following:<bR> <br>1.Click on the question number in the <span style="color:red;">question palette </span>at the bottom of your screen to go to that numbered question directly.Note that using this option does Not save your answer to the current question.
+        <br> <br>2.Click on <span style="color:red;"> Save & Next </span> to save your answer for the current question and then go to the next question.
+        <br> <br>3.Click on <span style="color:red;"> Mark for review </span> the current question also mark it for review.
+        <br> <br>
+        <span style="color:blue;">Note:</span>that your answer for the current question will <span style="color:red;">not be saved,</span>if you navigate to another question directly by clicking on a question number <span style="color:red;">without saving </span>the answer to the previous question.
+        </p>
+        <span style="color:blue;">Answering a Question:</span>
+        <p>Procedure for answering a multiple choice (MCQ) type question:</p>
+        <br> <br>1.Choose one answer from the 4 options (A,B,C,D)given below the question,Click on the bubble placed before the chosen option.
+        <br> <br> 2. To deselect your chosen answer ,click on the bubble of the chosen option again or click on the <span style="color:red;">Clear Answer button.</span>
+        <br> <br> 3. To change your chosen answer,click on the bubble of another option.
+        <br> <br> 4.To save your answer,you Must click on the <span style="color:red;"> Save & Next.</span> 
+      </p>
+      <span style="color:blue;">Section And Test Submitted:</span>
+      <p>1.At the end of the section, the message <span style="color:red;">"End of section" </span> will be displayed. Click on the <span style="color:red;"> Ok button.  </span>
+      <br> <br>2.After completing the section, <span style="color:red;">submit that section </span> by clicking on the section <span style="color:red;">submit button.</span>
+      <br> <br>3.The next section will be shown only  <span style="color:red;">after submitting the current section.</span>
+      </p>
+    </ul>
+    <label>
+      <input type="checkbox" id="agree-checkbox"> I have read and understood the instructions.
+    </label>
+    <button id="start-test-button" disabled>Start Test</button>
+  </div>
+
+  <!-- Test Interface -->
+  <div id="test-interface" class="hidden">
+    <h2>Online Test</h2>
+    <div id="timer-container">
+      <p>Test Timer: <span id="test-timer">02:00:00</span></p>
+    </div>
+
+    <!-- Current Section Title -->
+    <div id="current-section-title" class="section-title"></div>
+
+    <!-- Question Panel -->
+    <div id="question-panel">
+      <h3 id="question-title">Question</h3>
+      <p id="question-text"></p>
+      <div id="options-container"></div>
+      <p id="question-timer">00:00:00</p>
+      <div>
+        <button id="previous-button" disabled>Previous</button>
+        <button id="save-next-button">Save & Next</button>
+        <button id="mark-review-button">Mark for Review</button>
+        <button id="clear-answer-button">Clear Answer</button>
+      </div>
+      <button id="submit-section-button">Submit Section</button>
+    </div>
+
+    <!-- Section Preview -->
+    <div id="preview-container"></div>
+    <button id="submit-test-button">Submit Test</button>
+  </div>
+
+  <!-- Result Panel -->
+  <div id="result-panel" class="hidden">
+    <h2>Test Results</h2>
+    <p id="result-summary"></p>
+    <div id="section-results"></div>
+    <button onclick="location.reload()">Restart Test</button>
+  </div>
+</div>
+
+<script>
+  const questions = {
+    en: {
+      Math: [
+        { text: "What is 2 + 2?", options: ["1", "2", "3", "4"], correct: 3 },
+        { text: "What is 2 + 4?", options: ["1", "6", "3", "4"], correct: 1 },
+        { text: "What is 5 * 5?", options: ["10", "15", "25", "30"], correct: 2 },
+        { text: "1. ਮਹਾਰਾਜਾ ਰਣਜੀਤ ਸਿੰਘ ਦੇ ਰਾਜ ਤੋਂ ਪਹਿਲਾਂ ਕਿੰਨੀਆਂ ਸਿੱਖ ਮਿਸਲਾਂ ਸਨ ?", options: ["9", "10", "11", "12"], correct: 0 },
+        { text: "2. ਪਟਿਆਲਾ ਰਿਆਸਤ ਦੇ ਸੰਸਥਾਪਕ ਕੌਣ ਸਨ ?", options: ["ਜੱਸਾ ਸਿੰਘ ਆਹਲੂਵਾਲੀਆ", "ਚੜ੍ਹਤ ਸਿੰਘ", "ਆਲਾ ਸਿੰਘ", "ਜੱਸਾ ਸਿੰਘ ਰਾਮਗੜ੍ਹੀਆ"], correct: 1 },
+        { text: "3.ਹੇਠ ਲਿਖਿਆਂ ਵਿੱਚੋਂ ਕਿਸ ਇੱਕ-ਵਚਨ ਦਾ ਬਹੁ-ਵਚਨ ਨਹੀਂ ਹੈ ?", options: ["ਲੂਆਂ", "ਲਾਵਾਂ", "ਨਾਵਾਂ", "ਤੈਨੂੰਆਂ"], correct: 2 },
+        { text: "4.ਹੇਠਾਂ ਲਿਖੇ ਵਿਚੋਂ ਕਿਹੜਾ ਸ਼ਬਦ ਅਸ਼ੁੱਧ ਹੈ ?", options: ["ਨਿੱਗਰ", "ਨਿੱਘਰ", "ਉੱਘ", "ਸਾਂਜ"], correct: 2 },
+        { text: "5. ਹੇਠ ਲਿਖਿਆਂ ਵਿੱਚੋਂ ,ਨਿਰਣਾ-ਵਾਚਕ ਕਿਰਿਆ ਵਿਸ਼ੇਸ਼ਣ ਦਾ ਪਰਯੋਗ ਕਿੱਥੇ ਹੋਇਆ ਹੈ ?", options: ["ਤੁਸੀਂ ਕਿੰਨਾ ਤੁਰ ਸਕਦੇ ਹੋ ", "ਮੈਨੂੰ ਥੋੜ੍ਹਾ ਖਾਣਾ ਚਾਹੀਦਾ ਹੈ", "ਮੈਂ ਦੀਪਕ ਨੂੰ ਨਹੀਂ ਜਾਣਦਾ", "ਅਸੀਂ ਉੱਪਰ ਪੜ੍ਹਦੇ ਹਾਂ"], correct: 2 },
+        { text: "6.'ਪਿੱਠ ਦੇਣਾ' ਮੁਹਾਵਰੇ ਦਾ ਢੁਕਵਾਂ/ਸਹੀ ਅਰਥ ਚੁਣੋਂ:", options: ["ਹਾਰ ਜਾਣਾ", "ਮੌਕੇ ਤੇ ਕੰਮ ਨਾ ਆਉਣਾ", "ਸ਼ਾਬਾਸ਼ ਦੇਣਾ", "ਗੁਲਾਮੀ ਕਰਨਾ"], correct: 2 },
+        { text: "7. ਹੇਠਾਂ ਲਿਖੇ ਸ਼ਬਦਾਂ ਵਿਚੋਂ ਕਿਹੜਾ ਅਸੁੱਧ ਸ਼ਬਦ ਹੈ ?", options: ["ਉਧਾਲਣਾ", "ਸੁੱਘੜ", "ਵਰ੍ਹ", "ਭੰਭੀਰੀ"], correct: 2 },
+        { text: "8. 1939 ਵਿੱਚ ਮਹਾਰਾਜਾ ਰਣਜੀਤ ਸਿੰਘ ਦੀ ਮੌਤ ਤੋਂ ਬਾਅਦ ਪਹਿਲਾ ਉੱਤਰਾਧਿਕਾਰੀ ਕੌਣ ਸੀ ?", options: ["ਨੌਨਿਹਾਲਸਿੰਘ", "ਖੜਕ ਸਿੰਘ", "ਸ਼ੇਰ ਸਿੰਘ", "ਦਲੀਪ ਸਿੰਘ"], correct: 2 }
+      ],
+      Reasoning: [
+        { text: "Which number comes next in the sequence: 2, 4, 6, ?", options: ["7", "8", "10", "12"], correct: 1 },
+        { text: "What is the opposite of 'hot'?", options: ["Warm", "Cold", "Cool", "Freezing"], correct: 1 }
+      ],
+      English: [
+        { text: "What is the synonym of 'happy'?", options: ["Sad", "Joyful", "Angry", "Bored"], correct: 1 },
+        { text: "Fill in the blank: He is __ teacher.", options: ["a", "an", "the", "some"], correct: 1 }
+      ],
+      Computer: [
+        { text: "What does CPU stand for?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Processing Universal", "None of the above"], correct: 0 },
+        { text: "What is the shortcut for copying?", options: ["Ctrl+X", "Ctrl+C", "Ctrl+V", "Ctrl+Z"], correct: 1 }
+      ]
+    },
+
+    hi: {
+      Math: [
+        { text: "2 + 2 क्या है?", options: ["1", "2", "3", "4"], correct: 3 },
+        { text: "5 * 5 क्या है?", options: ["10", "15", "25", "30"], correct: 2 }
+      ],
+      Reasoning: [
+        { text: "अगला संख्या क्या होगी: 2, 4, 6, ?", options: ["7", "8", "10", "12"], correct: 1 },
+        { text: "‘गर्म’ का विपरीत क्या है?", options: ["गर्म", "ठंडा", "कूल", "ठंड"], correct: 1 }
+      ],
+      English: [
+        { text: "‘खुश’ का पर्यायवाची क्या है?", options: ["दुःखी", "आनंदित", "गुस्से में", "बोर"], correct: 1 },
+        { text: "रिक्त स्थान भरें: वह __ शिक्षक है।", options: ["एक", "अन", "वह", "कुछ"], correct: 1 }
+      ],
+      Computer: [
+        { text: "CPU का पूरा नाम क्या है?", options: ["सेंट्रल प्रोसेसिंग यूनिट", "कंप्यूटर पर्सनल यूनिट", "सेंट्रल प्रोसेसिंग यूनिवर्सल", "उपरोक्त में से कोई नहीं"], correct: 0 },
+        { text: "कॉपी करने का शॉर्टकट क्या है?", options: ["Ctrl+X", "Ctrl+C", "Ctrl+V", "Ctrl+Z"], correct: 1 }
+      ]
+    },
+    pa: {
+      Math: [
+        { text: "2 + 2 ਕੀ ਹੈ?", options: ["1", "2", "3", "4"], correct: 3 },
+        { text: "5 * 5 ਕੀ ਹੈ?", options: ["10", "15", "25", "30"], correct: 2 }
+      ],
+      Reasoning: [
+        { text: "ਅਗਲਾ ਨੰਬਰ ਕੀ ਹੋਵੇਗਾ: 2, 4, 6, ?", options: ["7", "8", "10", "12"], correct: 1 },
+        { text: "‘ਗਰਮ’ ਦਾ ਉਲਟ ਕੀ ਹੈ?", options: ["ਠੰਡਾ", "ਠੰਢਾ", "ਕੂਲ", "ਬਰਫ਼ੀਲਾ"], correct: 0 }
+      ],
+      English: [
+        { text: "‘Happy’ ਦਾ ਪਾਰਯਵਾਚੀ ਕੀ ਹੈ?", options: ["Sad", "Joyful", "Angry", "Bored"], correct: 1 },
+        { text: "ਅੰਕ ਭਰੋ: ਉਹ __ ਅਧਿਆਪਕ ਹੈ।", options: ["A", "An", "The", "Some"], correct: 1 }
+      ],
+      Computer: [
+        { text: "CPU ਦਾ ਪੂਰਾ ਨਾਮ ਕੀ ਹੈ?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Processing Universal", "None of the Above"], correct: 0 },
+        { text: "ਕੋਪੀਆਂ ਕਰਨ ਦਾ ਸ਼ਾਰਟਕਟ ਕੀ ਹੈ?", options: ["Ctrl+X", "Ctrl+C", "Ctrl+V", "Ctrl+Z"], correct: 1 }
+      ]
+    }
+  
+
+  
+  };
+
+  let currentQuestionIndex = 0;
+  let selectedLanguage = "en";
+  let currentSection = "Math";
+  let answers = {};
+  let reviewStatus = { Math: [], Reasoning: [], English: [], Computer: [] };
+
+  let questionStartTime = null;
+  let questionTimerInterval = null;
+  let globalTimerInterval = null;
+
+  document.getElementById("agree-checkbox").addEventListener("change", () => {
+    document.getElementById("start-test-button").disabled = !document.getElementById("agree-checkbox").checked;
+  });
+
+  document.getElementById("language-select").addEventListener("change", (e) => {
+    selectedLanguage = e.target.value;
+  });
+
+  document.getElementById("start-test-button").addEventListener("click", startTest);
+  document.getElementById("save-next-button").addEventListener("click", saveAndNext);
+  document.getElementById("previous-button").addEventListener("click", previousQuestion);
+  document.getElementById("mark-review-button").addEventListener("click", markForReview);
+  document.getElementById("clear-answer-button").addEventListener("click", clearAnswer);
+  document.getElementById("submit-test-button").addEventListener("click", submitTest);
+  document.getElementById("submit-section-button").addEventListener("click", submitSection);
+
+  function startTest() {
+    document.getElementById("instruction-page").classList.add("hidden");
+    document.getElementById("test-interface").classList.remove("hidden");
+    loadQuestion();
+    renderPreview();
+
+    // Start the global timer for the entire test
+    startGlobalTimer();
+  }
+
+  function loadQuestion() {
+    const question = questions[selectedLanguage][currentSection][currentQuestionIndex];
+    document.getElementById("current-section-title").textContent = `${currentSection} - Question ${currentQuestionIndex + 1}`;
+
+
+    document.getElementById("question-text").textContent = question.text;
+    const optionsContainer = document.getElementById("options-container");
+    optionsContainer.innerHTML = "";
+    question.options.forEach((option, index) => {
+      const label = document.createElement("label");
+      label.innerHTML =`<input type="radio" name="option" value="${index}"> ${option}`;
+      optionsContainer.appendChild(label);
+    });
+
+    // Start the timer for the current question
+    startQuestionTimer();
+
+    document.getElementById("previous-button").disabled = currentQuestionIndex === 0;
+  }
+
+  function startGlobalTimer() {
+  // Set test duration to 2 hours (in milliseconds)
+  const testDuration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+  let globalStartTime = Date.now();
+
+  // Set the time remaining to 2 hours initially
+  let timeRemaining = testDuration;
+
+  globalTimerInterval = setInterval(() => {
+    // Calculate the remaining time
+    const elapsed = Date.now() - globalStartTime;
+    timeRemaining = testDuration - elapsed;
+
+    // Stop the timer if time is up
+    if (timeRemaining <= 0) {
+      clearInterval(globalTimerInterval);
+      alert("Time is up! The test is now submitted.");
+      submitTest(); // You can automatically submit the test here if needed
+      return;
+    }
+
+    // Display the remaining time in HH:MM:SS format
+    const hours = String(Math.floor(timeRemaining / 3600000)).padStart(2, "0");
+    const minutes = String(Math.floor((timeRemaining % 3600000) / 60000)).padStart(2, "0");
+    const seconds = String(Math.floor((timeRemaining % 60000) / 1000)).padStart(2, "0");
+    document.getElementById("test-timer").textContent =`${hours}:${minutes}:${seconds}`;
+  }, 1000);
+}
+
+
+  function startQuestionTimer() {
+    if (questionTimerInterval) {
+      clearInterval(questionTimerInterval); // Clear any existing timer
+    }
+
+    // Reset the timer if starting fresh
+    questionStartTime = Date.now();
+
+    // Set up the timer to run every second
+    questionTimerInterval = setInterval(updateQuestionTimer, 1000);
+  }
+
+  function updateQuestionTimer() {
+    const elapsed = Math.floor((Date.now() - questionStartTime) / 1000);
+    const hours = String(Math.floor(elapsed / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((elapsed % 3600) / 60)).padStart(2, "0");
+    const seconds = String(elapsed % 60).padStart(2, "0");
+    document.getElementById("question-timer").textContent = `${hours}:${minutes}:${seconds}`;
+  }
+
+  function saveAndNext() {
+    const selectedOption = document.querySelector("input[name='option']:checked");
+    if (selectedOption) {
+      answers[`${currentSection}-${currentQuestionIndex}`] = parseInt(selectedOption.value);
+
+    }
+
+    // Clear the current timer when moving to the next question
+    clearInterval(questionTimerInterval);
+
+    if (currentQuestionIndex < questions[selectedLanguage][currentSection].length - 1) {
+      currentQuestionIndex++;
+      loadQuestion();
+    } else {
+      alert("End of section!");
+    }
+    renderPreview();
+  }
+
+  function previousQuestion() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      loadQuestion();
+    }
+  }
+
+  function markForReview() {
+    reviewStatus[currentSection][currentQuestionIndex] = true;
+    renderPreview();
+  }
+
+  function clearAnswer() {
+    delete answers[`${currentSection}-${currentQuestionIndex}`];
+    reviewStatus[currentSection][currentQuestionIndex] = false;
+    renderPreview();
+  }
+
+  function submitSection() {
+    alert(`Section "${currentSection}" submitted.`);
+
+    const nextSection = getNextSection();
+    if (nextSection) {
+      currentSection = nextSection;
+      currentQuestionIndex = 0;
+      loadQuestion();
+      renderPreview();
+    } else {
+      alert("All sections are complete. You can now submit the test.");
+    }
+  }
+
+  function getNextSection() {
+    const sections = Object.keys(questions[selectedLanguage]);
+    const currentSectionIndex = sections.indexOf(currentSection);
+    return sections[currentSectionIndex + 1] || null;
+  }
+
+  function renderPreview() {
+    const previewContainer = document.getElementById("preview-container");
+    previewContainer.innerHTML = "";
+    Object.keys(questions[selectedLanguage]).forEach((section) => {
+      const sectionContainer = document.createElement("div");
+      const sectionTitle = document.createElement("h4");
+      sectionTitle.textContent = section;
+      sectionContainer.appendChild(sectionTitle);
+      questions[selectedLanguage][section].forEach((_, index) => {
+        const button = document.createElement("button");
+        button.textContent = index + 1;
+        button.classList.add("preview-button");
+
+        if (answers[`${section}-${index}`] !== undefined
+        ) {
+          button.classList.add("answered");
+        } else if (reviewStatus[section]?.[index]) {
+          button.classList.add("marked");
+        } else {
+          button.classList.add("not-answered");
+        }
+
+        button.addEventListener("click", () => {
+          currentSection = section;
+          currentQuestionIndex = index;
+          loadQuestion();
+        });
+
+        sectionContainer.appendChild(button);
+      });
+      previewContainer.appendChild(sectionContainer);
+    });
+  }
+
+  function submitTest() {
+  document.getElementById("test-interface").classList.add("hidden");
+  document.getElementById("result-panel").classList.remove("hidden");
+
+  const resultContainer = document.getElementById("section-results");
+  resultContainer.innerHTML = "";
+
+  const totalQuestions = Object.values(questions[selectedLanguage]).flat().length;
+  let correctAnswersCount = 0;
+  let wrongAnswersCount = 0;
+  let markedForReviewCount = 0;
+
+  Object.keys(questions[selectedLanguage]).forEach((section) => {
+    const sectionTitle = document.createElement("h3");
+    sectionTitle.textContent = section;
+    resultContainer.appendChild(sectionTitle);
+
+    const table = document.createElement("table");
+    table.style.width = "100%";
+    table.border = "1";
+    const headerRow = document.createElement("tr");
+    headerRow.innerHTML = `
+      <th>Question</th>
+      <th>Your Answer</th>
+      <th>Correct Answer</th>
+      <th>Status</th>
+    `;
+    table.appendChild(headerRow);
+
+    questions[selectedLanguage][section].forEach((question, index) => {
+      const row = document.createElement("tr");
+      const userAnswerIndex = answers[`${section}-${index}`];
+      const userAnswer = userAnswerIndex !== undefined ? question.options[userAnswerIndex] : "Not Answered";
+      const correctAnswer = question.options[question.correct];
+      const isCorrect = userAnswerIndex === question.correct;
+
+      // Update counts
+      if (userAnswerIndex !== undefined) {
+        if (isCorrect) {
+          correctAnswersCount++;
+        } else {
+          wrongAnswersCount++;
+        }
+      }
+      if (reviewStatus[section]?.[index]) {
+        markedForReviewCount++;
+      }
+
+      // Add row data
+      row.innerHTML = `
+        <td>${question.text}</td>
+        <td style="color: ${isCorrect ? "green" : "red"}">${userAnswer}</td>
+        <td style="color: green">${correctAnswer}</td>
+        <td>${reviewStatus[section]?.[index] ? "Marked for Review" : userAnswerIndex !== undefined ? "Answered" : "Not Answered"}</td>
+      `;
+      table.appendChild(row);
+    });
+
+    resultContainer.appendChild(table);
+  });
+
+  // Show summary
+  const resultSummary = `
+    <p>Total Questions: ${totalQuestions}</p>
+    <p>Correct Answers: ${correctAnswersCount}</p>
+    <p>Wrong Answers: ${wrongAnswersCount}</p>
+    <p>Marked for Review: ${markedForReviewCount}</p>
+  `;
+  document.getElementById("result-summary").innerHTML = resultSummary;
+}
+
+</script>
+</body>
+</html>
